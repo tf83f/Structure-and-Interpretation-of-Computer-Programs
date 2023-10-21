@@ -1,0 +1,8 @@
+(define (letrec? exp) (tagged-list? exp 'letrec))
+(define (letrec-parameters exp) (cadr exp))
+(define (letrec-body exp) (cddr exp))
+(define (letrec-let exp) (map (lambda (x) (list (car x) '*unassigned*)) (lectrec-parameters exp)))
+(define (letrec-set exp) (map (lambda (x) (list 'set! (car x) (cadr x))) (letrec-parameters exp)))
+(define (letrec->let exp) 
+    (list 'let (letrec-let exp)
+                (make-begin (append (letrec-set exp) (letrec-body exp)))))
