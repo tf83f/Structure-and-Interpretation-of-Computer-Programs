@@ -1,9 +1,11 @@
-(define count 0)
-(define (id x) (set! count (+ count 1)) x)
+(define env the-global-environment) 
+(actual-value '(define count 0) env) 
+(actual-value '(define (id x) (set! count (+ count 1)) x) env) 
+(actual-value '(define w (id (id 10))) env) 
 
-(define w (id (id 10))) ; it is the thunk that is bound to w, not the number 10.
-(display count) ; 1 because that thunk is not forced until we call actual-value on w, and hence count has been incremented only once.
+it is the thunk that is bound to w, not the number 10.
+(actual-value 'count env) ; 1 because that thunk is not forced until we call actual-value on w, and hence count has been incremented only once.
 (newline)
-(display w) ; 10
+(actual-value 'w env) ; 10 return 10 because we use the actual-value. if just use eval we would get the thunk
 (newline)
-(display count) ; 2
+ (actual-value 'count env) ; 2
